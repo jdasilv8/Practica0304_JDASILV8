@@ -9,22 +9,21 @@ fuente = pygame.font.Font(None, 60)
 # Creamos la bola
 ball = pygame.image.load("ball.png")
 ballrect = ball.get_rect()
-speed = [3,3]
-ballrect.move(0,0)
+speed = [2, -2]
+ballrect.move(0,250)
 
 # Creamos el bate
 bate = pygame.image.load("bate.png")
 baterect = bate.get_rect()
 baterect.move_ip(350,550)
 
-#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-    # Creamos el muro
-muro = pygame.image.load("murorompiendo.png")
-murorect = muro.get_rect()
-murorect.move_ip(350,100)
-    
-#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+# Creamos una lista de muros y sus posiciones
+muros = []
+for i in range(7):
+    muro = pygame.image.load("murorompiendo.png")
+    murorect = muro.get_rect()
+    murorect.move_ip(100*i , 200)
+    muros.append(murorect)
 
 # Iniciamos el bucle principal del juego
 jugando = True
@@ -40,20 +39,17 @@ while jugando:
     if keys[pygame.K_RIGHT] and baterect.right < ventana.get_width():
         baterect = baterect.move(5,0)
     
-    # Si la barra y la bola chocan aumenta la velocidad de la bola y cambia de dirección
+    # Si la barra y la bola chocan, cambia la velocidad de la bola y la dirección
     if baterect.colliderect(ballrect):
         speed[1] = float(-speed[1] * 1.05)
         speed[0] = float(speed[0] * 1.05)
-        print(speed)
 
-#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    # Comprobamos colisiones de la bola con los muros
+    for muro in muros[:]:
+        if muro.colliderect(ballrect):
+            muros.remove(muro)
+            speed[1] = -speed[1]  
     
-    # Si el muro y la bola chocan aumenta la velocidad de la bola y cambia de dirección
-    if murorect.colliderect(ballrect):
-        speed[1] = (-speed[1])
-
-#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
     # Cuando la bola choque con algún borde de la ventana cambia dirección
     ballrect = ballrect.move(speed)
     if ballrect.left < 0 or ballrect.right > ventana.get_width():
@@ -69,12 +65,14 @@ while jugando:
         texto_y = ventana.get_height() / 2 - texto_rect.height / 2
         ventana.blit(texto, [texto_x, texto_y])
     
-    # Asignamos color a la ventana y generamos en pantalla la bola y la barra (para iniciar el juego)
+    # Asignamos color a la ventana y generamos en pantalla la bola, la barra y los muros (para iniciar el juego)
     else:
         ventana.fill((59, 6, 6))
         ventana.blit(ball, ballrect)
         ventana.blit(bate, baterect)
-        ventana.blit(muro, murorect)
+        for muro in muros:
+            ventana.blit(pygame.image.load("murorompiendo.png"), muro)
+    
     # Generamos los elementos del juego y asignamos los fotogramas por segundo
     pygame.display.flip()
     pygame.time.Clock().tick(60)
