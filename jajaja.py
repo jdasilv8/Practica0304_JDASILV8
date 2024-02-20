@@ -9,8 +9,8 @@ fuente = pygame.font.Font(None, 60)
 # Creamos la bola
 ball = pygame.image.load("ball.png")
 ballrect = ball.get_rect()
-speed = [2, -2]
-ballrect.move(0,250)
+speed = [2, 2]
+ballrect.move(400,500)
 
 # Creamos el bate
 bate = pygame.image.load("bate.png")
@@ -22,7 +22,7 @@ muros = []
 for i in range(7):
     muro = pygame.image.load("murorompiendo.png")
     murorect = muro.get_rect()
-    murorect.move_ip(100*i , 200)
+    murorect.move_ip(100 + 100 * i , 200)
     muros.append(murorect)
 
 # Iniciamos el bucle principal del juego
@@ -67,7 +67,7 @@ while jugando:
     
     # Asignamos color a la ventana y generamos en pantalla la bola, la barra y los muros (para iniciar el juego)
     else:
-        ventana.fill((59, 6, 6))
+        ventana.fill((0, 0, 0))
         ventana.blit(ball, ballrect)
         ventana.blit(bate, baterect)
         for muro in muros:
