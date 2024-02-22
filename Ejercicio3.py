@@ -18,18 +18,17 @@ baterect = bate.get_rect()
 baterect.move_ip(350,550)
 
 #Fondo
-
 fondo = pygame.image.load("REYNAYSAGE.jpg")
 fondorect = fondo.get_rect()
 
 # Creamos una lista de muros y sus posiciones
 muros = []
 for i in range(8):
-    if i%2 == 0:
+    if i != 3 or 5:
         for j in range(4):
             muro = pygame.image.load("murorompiendo.png")
             murorect = muro.get_rect()
-            murorect.move_ip(105 * i, j * 45)
+            murorect.move_ip(100 * i, 30 * j)
             muros.append(murorect)
 
 # Iniciamos el bucle principal del juego

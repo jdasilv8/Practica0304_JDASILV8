@@ -11,7 +11,7 @@ class Muro88:
             for j in range(6):
                 muro = pygame.image.load("murorompiendo.png")
                 murorect = muro.get_rect()
-                murorect.move_ip(105 * i, 45 * J)
+                murorect.move_ip(100 * i, 45 * J)
                 muros.append(murorect)
         
         return muros
