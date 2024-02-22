@@ -10,12 +10,26 @@ fuente = pygame.font.Font(None, 60)
 ball = pygame.image.load("ball.png")
 ballrect = ball.get_rect()
 speed = [3,3]
-ballrect.move_ip(0,0)
+ballrect.move_ip(400,500)
 
 # Creamos el bate
 bate = pygame.image.load("bate.png")
 baterect = bate.get_rect()
 baterect.move_ip(350,550)
+
+#Fondo
+
+fondo = pygame.image.load("REYNAYSAGE.jpg")
+fondorect = fondo.get_rect()
+
+# Creamos una lista de muros y sus posiciones
+muros = []
+for i in range(8):
+    for j in range(6):
+        muro = pygame.image.load("murorompiendo.png")
+        murorect = muro.get_rect()
+        murorect.move_ip(105 * i, j * 45)
+        muros.append(murorect)
 
 # Iniciamos el bucle principal del juego
 jugando = True
@@ -44,6 +58,12 @@ while jugando:
     if ballrect.top < 0:
         speed[1] = -speed[1]
 
+    # Comprobamos colisiones de la bola con los muros
+    for muro in muros:
+        if muro.colliderect(ballrect):
+            muros.remove(muro)
+            speed[1] = -speed[1]  
+
     # Si la bola toca el borde inferior se muestra GAME OVER y se detiene el juego
     if ballrect.bottom > ventana.get_height():
         texto = fuente.render("Game Over", True, (125,125,125))
@@ -54,11 +74,13 @@ while jugando:
     
     # Asignamos color a la ventana y generamos en pantalla la bola y la barra (para iniciar el juego)
     else:
-        ventana.fill((0, 0, 0))
+        ventana.blit(fondo,fondorect)
         ventana.blit(ball, ballrect)
         ventana.blit(bate, baterect)
+        for muro in muros:
+            ventana.blit(pygame.image.load("murorompiendo.png"), muro)
 
-    # Generamos los elementos del juego y asignamos los FPS
+    # Generamos los elementos del juego y asignamos los fotogramas por segundo
     pygame.display.flip()
     pygame.time.Clock().tick(60)
 
