@@ -25,11 +25,12 @@ fondorect = fondo.get_rect()
 # Creamos una lista de muros y sus posiciones
 muros = []
 for i in range(8):
-    for j in range(6):
-        muro = pygame.image.load("murorompiendo.png")
-        murorect = muro.get_rect()
-        murorect.move_ip(105 * i, j * 45)
-        muros.append(murorect)
+    if i%2 == 0:
+        for j in range(4):
+            muro = pygame.image.load("murorompiendo.png")
+            murorect = muro.get_rect()
+            murorect.move_ip(105 * i, j * 45)
+            muros.append(murorect)
 
 # Iniciamos el bucle principal del juego
 jugando = True
