@@ -9,8 +9,8 @@ fuente = pygame.font.Font(None, 60)
 # Creamos la bola
 ball = pygame.image.load("ball.png")
 ballrect = ball.get_rect()
-speed = [3,3]
-ballrect.move_ip(400,500)
+speed = [3,-3]
+ballrect.move_ip(410,500)
 
 # Creamos el bate
 bate = pygame.image.load("bate.png")
@@ -24,12 +24,22 @@ fondorect = fondo.get_rect()
 # Creamos una lista de muros y sus posiciones
 muros = []
 for i in range(8):
-    if i != 3 or 5:
         for j in range(4):
-            muro = pygame.image.load("murorompiendo.png")
-            murorect = muro.get_rect()
-            murorect.move_ip(100 * i, 30 * j)
-            muros.append(murorect)
+            if i % 2 == 0:
+                muro = pygame.image.load("murorompiendo.png")
+                murorect = muro.get_rect()
+                murorect.move_ip(100 * i, 30 * j)
+                muros.append(murorect)
+
+# Creamos una lista de muros DUROS y sus posiciones
+murosduros = []
+for i in range(8):
+        for j in range(4):
+            if i % 2 != 0:
+                muroduro = pygame.image.load("muronuevo.png")
+                murodurorect = muroduro.get_rect()
+                murodurorect.move_ip(100 * i, 30 * j)
+                murosduros.append(murodurorect)
 
 # Iniciamos el bucle principal del juego
 jugando = True
@@ -63,6 +73,11 @@ while jugando:
         if muro.colliderect(ballrect):
             muros.remove(muro)
             speed[1] = -speed[1]  
+    
+    # Comprobamos colisiones de la bola con los murosduros
+    for muroduro in murosduros:
+        if muroduro.colliderect(ballrect):
+            speed[1] = -speed[1]
 
     # Si la bola toca el borde inferior se muestra GAME OVER y se detiene el juego
     if ballrect.bottom > ventana.get_height():
@@ -79,6 +94,8 @@ while jugando:
         ventana.blit(bate, baterect)
         for muro in muros:
             ventana.blit(pygame.image.load("murorompiendo.png"), muro)
+        for muroduro in murosduros:
+            ventana.blit(pygame.image.load("muronuevo.png"), muroduro)
 
     # Generamos los elementos del juego y asignamos los fotogramas por segundo
     pygame.display.flip()
